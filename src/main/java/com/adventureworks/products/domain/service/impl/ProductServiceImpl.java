@@ -59,7 +59,6 @@ public class ProductServiceImpl implements ProductService {
     public Product update(ProductDto productDto) {
         var product = this.productRepository.findById(productDto.getId()).get();
         var productToSave = this.productMapper.toProductTarget(productDto, product);
-        productToSave.setRowguid(UUID.randomUUID().toString());
         productToSave.setModifiedDate(new Date());
         return this.productRepository.save(productToSave);
     }
