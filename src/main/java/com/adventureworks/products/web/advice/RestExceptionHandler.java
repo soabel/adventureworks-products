@@ -31,8 +31,6 @@ public class RestExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage globalExceptionHandler(Exception ex, WebRequest request) {
-        logger.info("globalExceptionHandler");
-        logger.info(ex.getClass().toString());
 
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
