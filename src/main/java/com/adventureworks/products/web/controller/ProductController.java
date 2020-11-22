@@ -6,9 +6,12 @@ import com.adventureworks.products.domain.service.mappers.ProductMapper;
 import com.adventureworks.products.persistence.entity.Product;
 import com.adventureworks.products.web.request.FindProductRequest;
 import com.adventureworks.products.web.request.SaveProductRequest;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,38 +31,32 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseBody()
-    Product getByIdProduct(@PathVariable("id") Integer id) {
-        logger.info("getByIdProduct");
-        var product = this.productService.getById(id);
-        return product;
+    ResponseEntity<Product> getByIdProduct(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(this.productService.getById(id), HttpStatus.OK);
     }
 
     @GetMapping()
     @ResponseBody()
-    List<ProductDto> findAll(@RequestParam("name") Optional<String> name) {
-        var products = this.productService.find(name.isPresent() ? name.get() : "");
-        return products;
+    ResponseEntity<List<ProductDto>> findAll(@RequestParam("name") Optional<String> name) {
+         return new ResponseEntity<>(this.productService.find(name.isPresent() ? name.get() : ""), HttpStatus.OK);
     }
 
     @GetMapping("/find")
     @ResponseBody()
-    List<ProductDto> findAll(@Valid FindProductRequest param){
-        var products = this.productService.findByParams(param);
-        return products;
+    ResponseEntity<List<ProductDto>> findAll(@Valid FindProductRequest param){
+        return new ResponseEntity<>(this.productService.findByParams(param), HttpStatus.OK);
     }
 
     @PostMapping()
     @ResponseBody()
-    Product save(@RequestBody() ProductDto productDto){
-        var result = this.productService.save(productDto);
-        return result;
+    ResponseEntity<Product> save(@RequestBody() ProductDto productDto){
+        return new ResponseEntity<>(this.productService.save(productDto), HttpStatus.CREATED);
     }
 
     @PutMapping()
     @ResponseBody()
-    Product update(@RequestBody() ProductDto productDto){
-        var result = this.productService.update(productDto);
-        return result;
+    ResponseEntity<Product> update(@RequestBody() ProductDto productDto){
+        return new ResponseEntity<>(this.productService.update(productDto), HttpStatus.OK);
     }
 
 }
